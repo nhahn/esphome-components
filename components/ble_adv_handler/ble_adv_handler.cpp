@@ -189,7 +189,7 @@ void BleAdvEncoder::encode(BleAdvParams & params, BleAdvEncCmd & enc_cmd, Contro
   uint8_t * buf = param.get_data_buf() + this->header_.size();
   this->encode(buf, enc_cmd, cont);
 
-  ESP_LOGD(this->id_.c_str(), "UUID: '0x%X', index: %d, tx: %d, enc: %s", 
+  ESP_LOGD(this->id_.c_str(), "UUID: '0x%lX', index: %d, tx: %d, enc: %s", 
       cont.id_, cont.index_, cont.tx_count_, this->to_str(enc_cmd).c_str());
 
   param.set_data_len(this->len_ + this->header_.size());    
@@ -257,7 +257,7 @@ uint16_t BleAdvHandler::add_to_advertiser(BleAdvParams & params) {
   uint32_t msg_id = ++this->id_count;
   for (auto & param : params) {
     this->packets_.emplace_back(BleAdvProcess(msg_id, std::move(param)));
-    ESP_LOGD(TAG, "request start advertising - %d: %s", msg_id, 
+    ESP_LOGD(TAG, "request start advertising - %ld: %s", msg_id, 
                 esphome::format_hex_pretty(param.get_full_buf(), param.get_full_len()).c_str());
   }
   params.clear(); // As we moved the content, just to be sure no caller will re use it
